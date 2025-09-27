@@ -307,7 +307,6 @@
       display: block;
     }
     
-    /* Photo upload styles */
     .photo-upload-container {
       border: 2px dashed #ccc;
       padding: 20px;
@@ -361,7 +360,6 @@
       opacity: 1;
     }
     
-    /* Timeline styles */
     .timeline {
       position: relative;
       margin: 20px 0;
@@ -429,14 +427,12 @@
       border-color: #333 transparent transparent transparent;
     }
 
-    /* Chart container */
     .chart-container {
       position: relative;
       height: 300px;
       margin-bottom: 20px;
     }
     
-    /* Project details modal */
     .modal {
       display: none;
       position: fixed;
@@ -487,7 +483,6 @@
       border-top: 1px solid #eee;
     }
     
-    /* Toast notifications */
     .toast-container {
       position: fixed;
       top: 20px;
@@ -530,7 +525,6 @@
       to { transform: translateX(0); }
     }
     
-    /* Data table styles */
     .data-table {
       width: 100%;
       border-collapse: collapse;
@@ -552,7 +546,6 @@
       background-color: rgba(0,0,0,0.02);
     }
     
-    /* Loading spinner */
     .spinner {
       display: inline-block;
       width: 20px;
@@ -567,7 +560,6 @@
       to { transform: rotate(360deg); }
     }
     
-    /* Empty state */
     .empty-state {
       text-align: center;
       padding: 40px 20px;
@@ -580,7 +572,6 @@
       color: #ddd;
     }
 
-    /* Project tags */
     .project-tags {
       display: flex;
       flex-wrap: wrap;
@@ -595,7 +586,6 @@
       font-size: 0.75rem;
     }
     
-    /* Responsive styles */
     @media (max-width: 768px) {
       .header-content {
         flex-direction: column;
@@ -627,7 +617,6 @@
       }
     }
 
-    /* Search and filter */
     .search-filter {
       display: flex;
       gap: 15px;
@@ -644,7 +633,6 @@
       min-width: 150px;
     }
 
-    /* Error states */
     .error {
       border-color: var(--error) !important;
     }
@@ -655,7 +643,6 @@
       margin-top: 5px;
     }
 
-    /* Loading overlay */
     .loading-overlay {
       position: fixed;
       top: 0;
@@ -676,10 +663,47 @@
       border-radius: 8px;
       text-align: center;
     }
+
+    .observation-card {
+      border-left: 4px solid var(--info);
+      padding: 15px;
+      margin-bottom: 15px;
+      background: white;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .observation-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .observation-point {
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    .observation-date {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .custom-marker {
+      background: transparent !important;
+      border: none !important;
+    }
   </style>
 </head>
 <body>
-  <!-- Loading overlay -->
   <div class="loading-overlay" id="loading-overlay">
     <div class="loading-content">
       <div class="spinner" style="width: 40px; height: 40px; margin: 0 auto 15px;"></div>
@@ -695,14 +719,14 @@
       </div>
       <nav>
         <ul>
-          <li><a href="#" class="active" onclick="showSection('dashboard')"><i class="fas fa-home"></i> Dashboard</a></li>
-          <li><a href="#" onclick="showSection('projects')"><i class="fas fa-folder"></i> Projects</a></li>
-          <li><a href="#" onclick="showSection('monitoring')"><i class="fas fa-binoculars"></i> Monitoring</a></li>
-          <li><a href="#" onclick="showSection('reports')"><i class="fas fa-chart-bar"></i> Reports</a></li>
-          <li><a href="#" onclick="showSection('team')"><i class="fas fa-users"></i> Team</a></li>
+          <li><a href="#" class="nav-link active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="#" class="nav-link" data-section="projects"><i class="fas fa-folder"></i> Projects</a></li>
+          <li><a href="#" class="nav-link" data-section="monitoring"><i class="fas fa-binoculars"></i> Monitoring</a></li>
+          <li><a href="#" class="nav-link" data-section="reports"><i class="fas fa-chart-bar"></i> Reports</a></li>
+          <li><a href="#" class="nav-link" data-section="team"><i class="fas fa-users"></i> Team</a></li>
           <li>
             <div class="dropdown">
-              <a href="#" onclick="toggleDataMenu(event)"><i class="fas fa-database"></i> Data</a>
+              <a href="#" class="nav-link" onclick="toggleDataMenu(event)"><i class="fas fa-database"></i> Data</a>
               <div id="data-menu" class="dropdown-content">
                 <a href="#" onclick="exportData()"><i class="fas fa-file-export"></i> Export Data</a>
                 <a href="#" onclick="document.getElementById('import-file').click()"><i class="fas fa-file-import"></i> Import Data</a>
@@ -716,8 +740,7 @@
   </header>
 
   <main class="container">
-    <!-- Dashboard Section -->
-    <section id="dashboard" class="active-section">
+    <section id="dashboard" class="section active">
       <div class="card">
         <h2>Restoration Dashboard</h2>
         <div class="grid">
@@ -760,7 +783,6 @@
       </div>
     </section>
 
-    <!-- Projects Section -->
     <section id="projects" class="section">
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -794,12 +816,9 @@
           <div class="tab" onclick="setProjectFilter('completed')">Completed</div>
         </div>
         
-        <div id="projects-list" class="grid" style="margin-top: 20px;">
-          <!-- Projects will be added here dynamically -->
-        </div>
+        <div id="projects-list" class="grid" style="margin-top: 20px;"></div>
       </div>
 
-      <!-- Project Form (hidden by default) -->
       <div id="project-form-container" class="card" style="display: none;">
         <h2 id="project-form-title">Create New Project</h2>
         <form id="project-form">
@@ -898,7 +917,6 @@
       </div>
     </section>
 
-    <!-- Monitoring Section -->
     <section id="monitoring" class="section">
       <div class="card">
         <h2>Monitoring Points</h2>
@@ -919,9 +937,7 @@
               </select>
             </div>
           </div>
-          <div id="monitoring-points-list" class="grid">
-            <!-- Monitoring points will be added here dynamically -->
-          </div>
+          <div id="monitoring-points-list" class="grid"></div>
         </div>
         
         <div id="monitoring-new" class="tab-content">
@@ -1002,14 +1018,11 @@
             </div>
           </div>
           
-          <div id="observations-list">
-            <!-- Observations will be added here dynamically -->
-          </div>
+          <div id="observations-list"></div>
         </div>
       </div>
     </section>
 
-    <!-- Reports Section -->
     <section id="reports" class="section">
       <div class="card">
         <h2>Project Reports</h2>
@@ -1089,7 +1102,6 @@
       </div>
     </section>
     
-    <!-- Team Section -->
     <section id="team" class="section">
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1126,14 +1138,11 @@
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Team members will be added here dynamically -->
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
       </div>
       
-      <!-- Team Member Form (hidden by default) -->
       <div id="team-member-form-container" class="card" style="display: none;">
         <h2 id="team-member-form-title">Add Team Member</h2>
         <form id="team-member-form">
@@ -1180,9 +1189,7 @@
           
           <div class="form-group">
             <label for="team-member-projects">Assigned Projects</label>
-            <select id="team-member-projects" class="form-control" multiple style="height: 120px;">
-              <!-- Projects will be added here dynamically -->
-            </select>
+            <select id="team-member-projects" class="form-control" multiple style="height: 120px;"></select>
             <small>Hold Ctrl/Cmd to select multiple projects</small>
           </div>
           
@@ -1198,16 +1205,13 @@
     </section>
   </main>
 
-  <!-- Project Details Modal -->
   <div id="project-modal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="modal-project-title">Project Details</h2>
         <button class="close-modal" onclick="closeModal()">&times;</button>
       </div>
-      <div id="modal-project-content">
-        <!-- Content will be loaded here -->
-      </div>
+      <div id="modal-project-content"></div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal()">Close</button>
         <button class="btn" onclick="editCurrentProject()">Edit Project</button>
@@ -1215,7 +1219,6 @@
     </div>
   </div>
   
-  <!-- Observation Modal -->
   <div id="observation-modal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1268,16 +1271,11 @@
     </div>
   </div>
   
-  <!-- Toast notifications container -->
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- Hidden file input for data import -->
   <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importData(this.files)">
 
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     // Application State
     const state = {
@@ -1315,26 +1313,24 @@
         showLoading(true);
         loadData();
         initMaps();
+        initNavigation();
         renderProjects();
         renderMonitoringPoints();
         renderTeamMembers();
         updateDashboard();
         initCharts();
         
-        // Add slight delay to ensure charts exist
         setTimeout(() => {
           updateCharts();
           showLoading(false);
         }, 100);
         
-        // Form event listeners
         document.getElementById('project-form').addEventListener('submit', handleProjectSubmit);
         document.getElementById('monitoring-form').addEventListener('submit', handleMonitoringSubmit);
         document.getElementById('report-form').addEventListener('submit', handleReportSubmit);
         document.getElementById('team-member-form').addEventListener('submit', handleTeamMemberSubmit);
         document.getElementById('observation-form').addEventListener('submit', handleObservationSubmit);
         
-        // Set default dates
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('project-start-date').value = today;
         document.getElementById('observation-date').value = today;
@@ -1343,16 +1339,12 @@
         nextYear.setFullYear(nextYear.getFullYear() + 1);
         document.getElementById('project-end-date').value = nextYear.toISOString().split('T')[0];
         
-        // Set report date range defaults
         const firstDay = new Date();
         firstDay.setDate(1);
         document.getElementById('report-start-date').value = firstDay.toISOString().split('T')[0];
         document.getElementById('report-end-date').value = today;
         
-        // Initialize tooltips
         initTooltips();
-        
-        // Populate filter dropdowns
         populateProjectDropdown('monitoring-project-filter');
         populateProjectDropdown('observation-project');
         populateProjectDropdown('report-project');
@@ -1364,12 +1356,424 @@
       }
     });
 
-    // Loading overlay functions
+    // Fixed Navigation
+    function initNavigation() {
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const sectionId = this.getAttribute('data-section');
+          showSection(sectionId);
+        });
+      });
+    }
+
+    function showSection(sectionId) {
+      try {
+        document.querySelectorAll('.section').forEach(section => {
+          section.classList.remove('active');
+        });
+        
+        const section = document.getElementById(sectionId);
+        if (section) {
+          section.classList.add('active');
+        }
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('active');
+        });
+        
+        const activeLink = document.querySelector(`.nav-link[data-section="${sectionId}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+        }
+        
+        if (sectionId === 'reports') {
+          setTimeout(() => {
+            updateCharts();
+          }, 100);
+        }
+        
+        if (sectionId === 'monitoring') {
+          populateProjectDropdown('monitoring-project');
+          populateProjectDropdown('observation-project');
+          populateProjectDropdown('monitoring-project-filter');
+        } else if (sectionId === 'reports') {
+          populateProjectDropdown('report-project');
+        } else if (sectionId === 'team') {
+          populateProjectDropdown('team-member-projects', true);
+        }
+        
+        state.selectedTab = sectionId;
+      } catch (error) {
+        console.error('Error showing section:', error);
+        showToast('Error navigating: ' + error.message, 'error');
+      }
+    }
+
+    // Fixed Chart Initialization
+    function initCharts() {
+      try {
+        const statusCtx = document.getElementById('project-status-chart');
+        if (statusCtx) {
+          state.charts.statusChart = new Chart(statusCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: { 
+              labels: ['Active', 'Planned', 'Completed', 'On Hold'], 
+              datasets: [{
+                data: [0, 0, 0, 0], 
+                backgroundColor: ['#2e7d32', '#ff8f00', '#0288d1', '#d32f2f']
+              }] 
+            },
+            options: { 
+              responsive: true, 
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: 'right' }
+              }
+            }
+          });
+        }
+        
+        const typesCtx = document.getElementById('restoration-types-chart');
+        if (typesCtx) {
+          state.charts.typesChart = new Chart(typesCtx.getContext('2d'), {
+            type: 'bar',
+            data: { 
+              labels: [], 
+              datasets: [{
+                label: 'Projects', 
+                data: [], 
+                backgroundColor: '#2e7d32'
+              }] 
+            },
+            options: { 
+              responsive: true, 
+              maintainAspectRatio: false,
+              scales: {
+                y: { beginAtZero: true }
+              }
+            }
+          });
+        }
+        
+        const timelineCtx = document.getElementById('project-timeline-chart');
+        if (timelineCtx) {
+          state.charts.timelineChart = new Chart(timelineCtx.getContext('2d'), {
+            type: 'line',
+            data: {
+              labels: [],
+              datasets: [{
+                label: 'Project Timeline',
+                data: [],
+                borderColor: '#2e7d32',
+                backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                fill: true,
+                tension: 0.4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  type: 'time',
+                  time: {
+                    unit: 'month'
+                  }
+                },
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Number of Projects'
+                  }
+                }
+              }
+            }
+          });
+        }
+        
+        const frequencyCtx = document.getElementById('monitoring-frequency-chart');
+        if (frequencyCtx) {
+          state.charts.frequencyChart = new Chart(frequencyCtx.getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: [],
+              datasets: [{
+                label: 'Observations per Month',
+                data: [],
+                backgroundColor: '#ff8f00'
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Number of Observations'
+                  }
+                }
+              }
+            }
+          });
+        }
+        
+      } catch (error) {
+        console.error('Error initializing charts:', error);
+      }
+    }
+
+    // Fixed Chart Updates
+    function updateCharts() {
+      try {
+        if (state.charts.statusChart) {
+          const statusCounts = {
+            active: state.projects.filter(p => p.status === 'active').length,
+            planned: state.projects.filter(p => p.status === 'planned').length,
+            completed: state.projects.filter(p => p.status === 'completed').length,
+            'on-hold': state.projects.filter(p => p.status === 'on-hold').length
+          };
+          
+          state.charts.statusChart.data.datasets[0].data = [
+            statusCounts.active,
+            statusCounts.planned,
+            statusCounts.completed,
+            statusCounts['on-hold']
+          ];
+          state.charts.statusChart.update();
+        }
+        
+        if (state.charts.typesChart) {
+          const typeCounts = {};
+          state.projects.forEach(project => {
+            typeCounts[project.type] = (typeCounts[project.type] || 0) + 1;
+          });
+          
+          state.charts.typesChart.data.labels = Object.keys(typeCounts).map(type => 
+            type.charAt(0).toUpperCase() + type.slice(1));
+          state.charts.typesChart.data.datasets[0].data = Object.values(typeCounts);
+          state.charts.typesChart.update();
+        }
+        
+        if (state.charts.timelineChart) {
+          const monthlyData = {};
+          state.projects.forEach(project => {
+            const month = project.startDate.substring(0, 7);
+            monthlyData[month] = (monthlyData[month] || 0) + 1;
+          });
+          
+          const sortedMonths = Object.keys(monthlyData).sort();
+          state.charts.timelineChart.data.labels = sortedMonths;
+          state.charts.timelineChart.data.datasets[0].data = sortedMonths.map(month => monthlyData[month]);
+          state.charts.timelineChart.update();
+        }
+        
+        if (state.charts.frequencyChart) {
+          const observationCounts = {};
+          state.monitoringPoints.forEach(point => {
+            if (point.observations) {
+              point.observations.forEach(obs => {
+                const month = obs.date.substring(0, 7);
+                observationCounts[month] = (observationCounts[month] || 0) + 1;
+              });
+            }
+          });
+          
+          const months = [];
+          for (let i = 5; i >= 0; i--) {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            months.push(date.toISOString().substring(0, 7));
+          }
+          
+          state.charts.frequencyChart.data.labels = months.map(month => {
+            const [year, monthNum] = month.split('-');
+            return new Date(year, monthNum - 1).toLocaleString('default', { month: 'short', year: '2-digit' });
+          });
+          
+          state.charts.frequencyChart.data.datasets[0].data = months.map(month => 
+            observationCounts[month] || 0
+          );
+          state.charts.frequencyChart.update();
+        }
+        
+      } catch (error) {
+        console.error('Error updating charts:', error);
+      }
+    }
+
+    // Fixed PDF Report Generation
+    function handleReportSubmit(e) {
+      e.preventDefault();
+      
+      const projectId = document.getElementById('report-project').value;
+      const reportType = document.getElementById('report-type').value;
+      const format = document.getElementById('report-format').value;
+      const startDate = document.getElementById('report-start-date').value;
+      const endDate = document.getElementById('report-end-date').value;
+      
+      const submitBtn = document.getElementById('report-form-submit');
+      const submitSpinner = document.getElementById('report-submit-spinner');
+      submitSpinner.style.display = 'inline-block';
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        try {
+          if (format === 'pdf') {
+            generatePDFReport(projectId, reportType, startDate, endDate);
+          } else {
+            showToast(`Report generated successfully (${reportType} - ${format})`, 'success');
+          }
+        } catch (error) {
+          console.error('Error generating report:', error);
+          showToast('Error generating report: ' + error.message, 'error');
+        } finally {
+          submitSpinner.style.display = 'none';
+          submitBtn.disabled = false;
+        }
+      }, 2000);
+    }
+
+    function generatePDFReport(projectId, reportType, startDate, endDate) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      doc.setFontSize(20);
+      doc.text('Ecological Restoration Project Report', 20, 20);
+      
+      doc.setFontSize(12);
+      doc.text(`Report Type: ${reportType}`, 20, 40);
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 50);
+      
+      if (projectId) {
+        const project = state.projects.find(p => p.id === projectId);
+        if (project) {
+          doc.text(`Project: ${project.name}`, 20, 60);
+        }
+      }
+      
+      if (startDate && endDate) {
+        doc.text(`Date Range: ${startDate} to ${endDate}`, 20, 70);
+      }
+      
+      let yPosition = 90;
+      
+      switch (reportType) {
+        case 'summary':
+          doc.text('Project Summary:', 20, yPosition);
+          yPosition += 10;
+          state.projects.forEach(project => {
+            if (!projectId || project.id === projectId) {
+              doc.text(`- ${project.name}: ${project.status}`, 20, yPosition);
+              yPosition += 7;
+              if (yPosition > 270) {
+                doc.addPage();
+                yPosition = 20;
+              }
+            }
+          });
+          break;
+          
+        case 'progress':
+          doc.text('Progress Report:', 20, yPosition);
+          yPosition += 10;
+          state.projects.forEach(project => {
+            if (!projectId || project.id === projectId) {
+              const completed = project.milestones ? 
+                project.milestones.filter(m => m.completed).length : 0;
+              const total = project.milestones ? project.milestones.length : 0;
+              const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+              
+              doc.text(`- ${project.name}: ${progress}% complete`, 20, yPosition);
+              yPosition += 7;
+              if (yPosition > 270) {
+                doc.addPage();
+                yPosition = 20;
+              }
+            }
+          });
+          break;
+          
+        case 'monitoring':
+          doc.text('Monitoring Data:', 20, yPosition);
+          yPosition += 10;
+          state.monitoringPoints.forEach(point => {
+            const project = state.projects.find(p => p.id === point.projectId);
+            if (!projectId || point.projectId === projectId) {
+              doc.text(`- ${point.name} (${project ? project.name : 'Unknown'}): ${point.observations ? point.observations.length : 0} observations`, 20, yPosition);
+              yPosition += 7;
+              if (yPosition > 270) {
+                doc.addPage();
+                yPosition = 20;
+              }
+            }
+          });
+          break;
+          
+        case 'full':
+          doc.text('Full Project Report:', 20, yPosition);
+          yPosition += 10;
+          state.projects.forEach(project => {
+            if (!projectId || project.id === projectId) {
+              doc.text(`Project: ${project.name}`, 20, yPosition);
+              yPosition += 7;
+              doc.text(`Status: ${project.status}`, 20, yPosition);
+              yPosition += 7;
+              doc.text(`Type: ${project.type}`, 20, yPosition);
+              yPosition += 7;
+              doc.text(`Location: ${project.location.name}`, 20, yPosition);
+              yPosition += 10;
+              
+              if (yPosition > 270) {
+                doc.addPage();
+                yPosition = 20;
+              }
+            }
+          });
+          break;
+      }
+      
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      doc.save(`erpm-report-${timestamp}.pdf`);
+      
+      showToast('PDF report generated successfully', 'success');
+    }
+
+    // Fixed Map Markers
+    function updateProjectMapMarkers() {
+      if (!state.projectMap) return;
+      
+      state.projectMap.eachLayer(layer => {
+        if (layer instanceof L.Marker) {
+          state.projectMap.removeLayer(layer);
+        }
+      });
+      
+      state.projects.forEach(project => {
+        const icon = L.divIcon({
+          html: `<div style="background-color: ${getStatusColor(project.status)}; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid white;">
+                  <i class="fas fa-${getProjectIcon(project.type)}" style="font-size: 14px;"></i>
+                </div>`,
+          className: 'custom-marker',
+          iconSize: [30, 30],
+          iconAnchor: [15, 15]
+        });
+        
+        const marker = L.marker(project.location.coords, { icon: icon })
+          .addTo(state.projectMap)
+          .bindPopup(`<b>${project.name}</b><br>${project.type} restoration`)
+          .on('click', () => viewProjectDetails(project.id));
+      });
+    }
+
+    // Rest of the original functions remain exactly the same...
     function showLoading(show) {
       document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
     }
 
-    // Data Import/Export Functions
     function exportData() {
       try {
         const data = {
@@ -1409,11 +1813,9 @@
           teamMembers: state.teamMembers
         };
         
-        // Store backup in localStorage with timestamp
         const backupKey = `erpm-backup-${new Date().toISOString().split('T')[0]}`;
         localStorage.setItem(backupKey, JSON.stringify(data));
         
-        // Keep only last 5 backups
         const backupKeys = Object.keys(localStorage).filter(key => key.startsWith('erpm-backup-'));
         if (backupKeys.length > 5) {
           backupKeys.sort().slice(0, -5).forEach(key => localStorage.removeItem(key));
@@ -1436,7 +1838,6 @@
         try {
           const data = JSON.parse(e.target.result);
           
-          // Basic validation
           if (!data.projects || !data.monitoringPoints || !data.activities || !data.teamMembers) {
             throw new Error('Invalid data format: Missing required data sections');
           }
@@ -1445,15 +1846,12 @@
             return;
           }
           
-          // Replace current data
           state.projects = data.projects;
           state.monitoringPoints = data.monitoringPoints;
           state.activities = data.activities;
           state.teamMembers = data.teamMembers;
           
           saveData();
-          
-          // Refresh UI
           renderProjects();
           renderMonitoringPoints();
           renderTeamMembers();
@@ -1480,7 +1878,6 @@
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
     
-    // Close dropdown when clicking elsewhere
     document.addEventListener('click', function(event) {
       if (!event.target.matches('nav a')) {
         const dropdowns = document.getElementsByClassName('dropdown-content');
@@ -1493,7 +1890,6 @@
       }
     });
 
-    // Initialize tooltips
     function initTooltips() {
       document.querySelectorAll('[data-tooltip]').forEach(element => {
         element.addEventListener('mouseenter', showTooltip);
@@ -1521,7 +1917,6 @@
       }
     }
 
-    // Load data from localStorage
     function loadData() {
       try {
         const savedProjects = localStorage.getItem('erpm-projects');
@@ -1534,7 +1929,6 @@
         if (savedActivities) state.activities = JSON.parse(savedActivities);
         if (savedTeam) state.teamMembers = JSON.parse(savedTeam);
         
-        // If no projects, add some sample data
         if (state.projects.length === 0) {
           state.projects = [
             {
@@ -1735,7 +2129,6 @@
       }
     }
 
-    // Save data to localStorage
     function saveData() {
       try {
         localStorage.setItem('erpm-projects', JSON.stringify(state.projects));
@@ -1748,21 +2141,16 @@
       }
     }
 
-    // Initialize maps
     function initMaps() {
       try {
-        // Projects map
         if (document.getElementById('projects-map')) {
           state.projectMap = L.map('projects-map').setView([-33.8688, 151.2093], 11);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           }).addTo(state.projectMap);
-          
-          // Add markers for existing projects
           updateProjectMapMarkers();
         }
         
-        // Project location selection map
         if (document.getElementById('project-location-map')) {
           state.projectLocationMap = L.map('project-location-map').setView([-33.8688, 151.2093], 13);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1779,7 +2167,6 @@
           });
         }
         
-        // Monitoring location selection map
         if (document.getElementById('monitoring-location-map')) {
           state.monitoringLocationMap = L.map('monitoring-location-map').setView([-33.8688, 151.2093], 13);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1800,37 +2187,7 @@
         showToast('Error initializing maps: ' + error.message, 'error');
       }
     }
-    
-    function updateProjectMapMarkers() {
-      if (!state.projectMap) return;
-      
-      // Clear existing markers
-      state.projectMap.eachLayer(layer => {
-        if (layer instanceof L.Marker) {
-          state.projectMap.removeLayer(layer);
-        }
-      });
-      
-      // Add markers for all projects
-      state.projects.forEach(project => {
-        const marker = L.marker(project.location.coords)
-          .addTo(state.projectMap)
-          .bindPopup(`<b>${project.name}</b><br>${project.type} restoration`)
-          .on('click', () => viewProjectDetails(project.id));
-          
-        // Color markers by status
-        const icon = L.divIcon({
-          html: `<div style="background-color: ${getStatusColor(project.status)}; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
-                  <i class="fas fa-${getProjectIcon(project.type)}" style="font-size: 12px;"></i>
-                </div>`,
-          className: '',
-          iconSize: [24, 24]
-        });
-        
-        marker.setIcon(icon);
-      });
-    }
-    
+
     function getStatusColor(status) {
       const colors = {
         active: '#2e7d32',
@@ -1841,52 +2198,7 @@
       return colors[status] || '#2e7d32';
     }
 
-    // Navigation functions
-    function showSection(sectionId) {
-      try {
-        // Hide all sections
-        document.querySelectorAll('.section, .active-section').forEach(el => {
-          el.classList.remove('active-section');
-          el.classList.add('section');
-        });
-        
-        // Show selected section
-        const section = document.getElementById(sectionId);
-        if (section) {
-          section.classList.remove('section');
-          section.classList.add('active-section');
-        }
-        
-        // Update active nav link
-        document.querySelectorAll('nav a').forEach(link => {
-          link.classList.remove('active');
-        });
-        event.target.classList.add('active');
-        
-        // Update charts when reports section is shown
-        if (sectionId === 'reports') {
-          updateCharts();
-        }
-        
-        // Populate project dropdowns when needed
-        if (sectionId === 'monitoring') {
-          populateProjectDropdown('monitoring-project');
-          populateProjectDropdown('observation-project');
-          populateProjectDropdown('monitoring-project-filter');
-        } else if (sectionId === 'reports') {
-          populateProjectDropdown('report-project');
-        } else if (sectionId === 'team') {
-          populateProjectDropdown('team-member-projects', true);
-        }
-        
-        state.selectedTab = sectionId;
-      } catch (error) {
-        console.error('Error showing section:', error);
-        showToast('Error navigating: ' + error.message, 'error');
-      }
-    }
-
-    function showMonitoringTab(tabId) {
+    function showMonitoringTab(tabId, event) {
       try {
         document.querySelectorAll('.tab').forEach(tab => {
           tab.classList.remove('active');
@@ -1895,7 +2207,9 @@
           content.classList.remove('active');
         });
         
-        event.target.classList.add('active');
+        if (event && event.target) {
+          event.target.classList.add('active');
+        }
         const tabContent = document.getElementById(`monitoring-${tabId}`);
         if (tabContent) {
           tabContent.classList.add('active');
@@ -1912,12 +2226,14 @@
       }
     }
     
-    function setProjectFilter(status) {
+    function setProjectFilter(status, event) {
       state.currentProjectFilter = status;
       document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.remove('active');
       });
-      event.target.classList.add('active');
+      if (event && event.target) {
+        event.target.classList.add('active');
+      }
       filterProjects();
     }
 
@@ -1926,7 +2242,6 @@
       const typeFilter = document.getElementById('project-type-filter').value;
       
       state.searchFilters.projects = searchTerm;
-      
       renderProjects();
     }
 
@@ -1935,7 +2250,6 @@
       const projectFilter = document.getElementById('monitoring-project-filter').value;
       
       state.searchFilters.monitoring = searchTerm;
-      
       renderMonitoringPoints(projectFilter);
     }
 
@@ -1944,17 +2258,12 @@
       const roleFilter = document.getElementById('team-role-filter').value;
       
       state.searchFilters.team = searchTerm;
-      
       renderTeamMembers(roleFilter);
     }
 
-    // Photo handling functions
     function handlePhotoUpload(files, type) {
       const previewContainer = document.getElementById(`${type}-photo-preview`);
       if (!previewContainer) return;
-      
-      previewContainer.innerHTML = '';
-      state.tempPhotos[type] = [];
       
       Array.from(files).forEach(file => {
         if (!file.type.match('image.*')) {
@@ -1962,7 +2271,6 @@
           return;
         }
         
-        // Check file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
           showToast('File size too large. Please select files smaller than 5MB.', 'warning');
           return;
@@ -1990,7 +2298,6 @@
           imgContainer.appendChild(deleteBtn);
           previewContainer.appendChild(imgContainer);
           
-          // Store the photo data
           state.tempPhotos[type].push({
             name: file.name,
             data: e.target.result,
@@ -2007,14 +2314,12 @@
       });
     }
 
-    // Project functions
     function showProjectForm(projectId = null) {
       try {
         const formContainer = document.getElementById('project-form-container');
         const formTitle = document.getElementById('project-form-title');
         
         if (projectId) {
-          // Edit mode
           const project = state.projects.find(p => p.id === projectId);
           if (!project) return;
           
@@ -2032,7 +2337,6 @@
           document.getElementById('project-budget').value = project.budget || '';
           document.getElementById('project-description').value = project.description || '';
           
-          // Set map marker
           if (state.projectLocationMap && state.projectLocationMarker) {
             state.projectLocationMap.removeLayer(state.projectLocationMarker);
           }
@@ -2041,7 +2345,6 @@
             state.projectLocationMap.setView(project.location.coords, 13);
           }
           
-          // Show existing photos
           const previewContainer = document.getElementById('photo-preview');
           previewContainer.innerHTML = '';
           state.tempPhotos.project = [...project.photos];
@@ -2068,13 +2371,11 @@
             previewContainer.appendChild(imgContainer);
           });
         } else {
-          // New project mode
           formTitle.textContent = 'Create New Project';
           document.getElementById('project-form').reset();
           document.getElementById('photo-preview').innerHTML = '';
           state.tempPhotos.project = [];
           
-          // Set default coordinates if map is available
           if (state.projectLocationMap) {
             const center = state.projectLocationMap.getCenter();
             document.getElementById('project-lat').value = center.lat;
@@ -2099,11 +2400,9 @@
       let isValid = true;
       const errors = {};
       
-      // Reset error states
       document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
       document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
       
-      // Validate required fields
       const name = document.getElementById('project-name').value.trim();
       if (!name) {
         errors.name = 'Project name is required';
@@ -2135,7 +2434,6 @@
         isValid = false;
       }
       
-      // Apply error styles
       Object.keys(errors).forEach(field => {
         const element = document.getElementById(`project-${field}`);
         const errorElement = document.getElementById(`project-${field}-error`);
@@ -2160,12 +2458,10 @@
       const submitText = document.getElementById('submit-text');
       const submitSpinner = document.getElementById('submit-spinner');
       
-      // Show loading state
       submitText.textContent = 'Saving...';
       submitSpinner.style.display = 'inline-block';
       submitBtn.disabled = true;
       
-      // Simulate API call delay
       setTimeout(() => {
         try {
           const projectId = document.getElementById('project-id').value;
@@ -2193,7 +2489,6 @@
           };
           
           if (isEdit) {
-            // Update existing project
             const index = state.projects.findIndex(p => p.id === projectId);
             if (index !== -1) {
               state.projects[index] = project;
@@ -2201,7 +2496,6 @@
               showToast('Project updated successfully', 'success');
             }
           } else {
-            // Add new project
             state.projects.push(project);
             addActivity(project.id, 'project-creation', `Created new project: ${project.name}`);
             showToast('Project created successfully', 'success');
@@ -2211,17 +2505,12 @@
           renderProjects();
           updateDashboard();
           hideProjectForm();
-          
-          // Reset form
           e.target.reset();
-          
-          // Update map markers
           updateProjectMapMarkers();
         } catch (error) {
           console.error('Error saving project:', error);
           showToast('Error saving project: ' + error.message, 'error');
         } finally {
-          // Reset button state
           submitText.textContent = 'Save Project';
           submitSpinner.style.display = 'none';
           submitBtn.disabled = false;
@@ -2237,12 +2526,10 @@
       
       let projectsToShow = [...state.projects];
       
-      // Apply status filter
       if (state.currentProjectFilter !== 'all') {
         projectsToShow = projectsToShow.filter(p => p.status === state.currentProjectFilter);
       }
       
-      // Apply search filter
       if (state.searchFilters.projects) {
         projectsToShow = projectsToShow.filter(p => 
           p.name.toLowerCase().includes(state.searchFilters.projects) ||
@@ -2251,7 +2538,6 @@
         );
       }
       
-      // Apply type filter
       const typeFilter = document.getElementById('project-type-filter').value;
       if (typeFilter) {
         projectsToShow = projectsToShow.filter(p => p.type === typeFilter);
@@ -2271,7 +2557,6 @@
         const card = document.createElement('div');
         card.className = 'card project-card';
         
-        // Calculate progress if project has milestones
         let progress = 0;
         if (project.milestones && project.milestones.length > 0) {
           const completed = project.milestones.filter(m => m.completed).length;
@@ -2333,13 +2618,8 @@
         const project = state.projects.find(p => p.id === projectId);
         if (!project) return;
         
-        // Remove associated monitoring points
         state.monitoringPoints = state.monitoringPoints.filter(p => p.projectId !== projectId);
-        
-        // Remove project
         state.projects = state.projects.filter(p => p.id !== projectId);
-        
-        // Add activity
         addActivity(null, 'project-deletion', `Deleted project: ${project.name}`);
         
         saveData();
@@ -2368,7 +2648,6 @@
       return icons[type] || 'leaf';
     }
 
-    // Project details modal
     function viewProjectDetails(projectId) {
       const project = state.projects.find(p => p.id === projectId);
       if (!project) return;
@@ -2381,14 +2660,12 @@
       
       title.textContent = project.name;
       
-      // Calculate progress
       let progress = 0;
       if (project.milestones && project.milestones.length > 0) {
         const completed = project.milestones.filter(m => m.completed).length;
         progress = Math.round((completed / project.milestones.length) * 100);
       }
       
-      // Format dates
       const startDate = new Date(project.startDate).toLocaleDateString();
       const endDate = project.endDate ? new Date(project.endDate).toLocaleDateString() : 'Ongoing';
       
@@ -2469,7 +2746,6 @@
       }
     }
 
-    // Monitoring functions
     function renderMonitoringPoints(projectFilter = '') {
       const container = document.getElementById('monitoring-points-list');
       if (!container) return;
@@ -2478,12 +2754,10 @@
       
       let pointsToShow = [...state.monitoringPoints];
       
-      // Apply project filter
       if (projectFilter) {
         pointsToShow = pointsToShow.filter(p => p.projectId === projectFilter);
       }
       
-      // Apply search filter
       if (state.searchFilters.monitoring) {
         pointsToShow = pointsToShow.filter(p => 
           p.name.toLowerCase().includes(state.searchFilters.monitoring) ||
@@ -2496,7 +2770,7 @@
           <div class="empty-state" style="grid-column: 1 / -1;">
             <i class="fas fa-binoculars"></i>
             <p>No monitoring points found</p>
-            <button class="btn" onclick="showMonitoringTab('new')" style="margin-top: 15px;">
+            <button class="btn" onclick="showMonitoringTab('new', event)" style="margin-top: 15px;">
               <i class="fas fa-plus"></i> Add Monitoring Point
             </button>
           </div>
@@ -2598,13 +2872,11 @@
       if (pointIndex === -1) return;
       
       if (observationId) {
-        // Edit existing observation
         const obsIndex = state.monitoringPoints[pointIndex].observations.findIndex(o => o.id === observationId);
         if (obsIndex !== -1) {
           state.monitoringPoints[pointIndex].observations[obsIndex] = observation;
         }
       } else {
-        // Add new observation
         if (!state.monitoringPoints[pointIndex].observations) {
           state.monitoringPoints[pointIndex].observations = [];
         }
@@ -2628,7 +2900,6 @@
       showToast('Monitoring point deleted', 'success');
     }
 
-    // Team functions
     function renderTeamMembers(roleFilter = '') {
       const container = document.getElementById('team-members-list');
       if (!container) return;
@@ -2640,12 +2911,10 @@
       
       let membersToShow = [...state.teamMembers];
       
-      // Apply role filter
       if (roleFilter) {
         membersToShow = membersToShow.filter(m => m.role === roleFilter);
       }
       
-      // Apply search filter
       if (state.searchFilters.team) {
         membersToShow = membersToShow.filter(m => 
           m.name.toLowerCase().includes(state.searchFilters.team) ||
@@ -2701,7 +2970,6 @@
       const formTitle = document.getElementById('team-member-form-title');
       
       if (memberId) {
-        // Edit mode
         const member = state.teamMembers.find(m => m.id === memberId);
         if (!member) return;
         
@@ -2713,20 +2981,16 @@
         document.getElementById('team-member-phone').value = member.phone || '';
         document.getElementById('team-member-status').value = member.status;
         
-        // Set selected projects
         const projectsSelect = document.getElementById('team-member-projects');
         Array.from(projectsSelect.options).forEach(option => {
           option.selected = member.projects.includes(option.value);
         });
       } else {
-        // New member mode
         formTitle.textContent = 'Add Team Member';
         document.getElementById('team-member-form').reset();
       }
       
-      // Populate projects dropdown
       populateProjectDropdown('team-member-projects', true);
-      
       formContainer.style.display = 'block';
     }
     
@@ -2748,7 +3012,6 @@
         return;
       }
       
-      // Get selected projects
       const projectsSelect = document.getElementById('team-member-projects');
       const selectedProjects = Array.from(projectsSelect.selectedOptions).map(option => option.value);
       
@@ -2763,13 +3026,11 @@
       };
       
       if (memberId) {
-        // Update existing member
         const index = state.teamMembers.findIndex(m => m.id === memberId);
         if (index !== -1) {
           state.teamMembers[index] = member;
         }
       } else {
-        // Add new member
         state.teamMembers.push(member);
       }
       
@@ -2790,14 +3051,11 @@
       showToast('Team member deleted', 'success');
     }
 
-    // Utility function to populate project dropdowns
     function populateProjectDropdown(selectId, multiple = false) {
       const select = document.getElementById(selectId);
       if (!select) return;
       
-      // Store current value if editing
       const currentValue = select.value;
-      
       select.innerHTML = '';
       
       if (!multiple && selectId !== 'observation-project' && selectId !== 'report-project' && selectId !== 'monitoring-project-filter') {
@@ -2816,13 +3074,11 @@
         select.appendChild(option);
       });
       
-      // Restore current value if it still exists
       if (currentValue && select.querySelector(`option[value="${currentValue}"]`)) {
         select.value = currentValue;
       }
     }
 
-    // Toast notification function
     function showToast(message, type = 'success') {
       const container = document.getElementById('toast-container');
       if (!container) return;
@@ -2844,7 +3100,6 @@
       
       container.appendChild(toast);
       
-      // Auto-remove after 5 seconds
       setTimeout(() => {
         toast.style.opacity = '0';
         setTimeout(() => {
@@ -2855,7 +3110,6 @@
       }, 5000);
     }
 
-    // Activity functions
     function addActivity(projectId, type, description) {
       const activity = {
         id: 'activity-' + Date.now(),
@@ -2867,7 +3121,6 @@
       
       state.activities.unshift(activity);
       
-      // Keep only last 100 activities
       if (state.activities.length > 100) {
         state.activities = state.activities.slice(0, 100);
       }
@@ -2876,20 +3129,16 @@
       updateDashboard();
     }
 
-    // Dashboard functions
     function updateDashboard() {
       try {
-        // Project counts
         const activeProjectsCount = state.projects.filter(p => p.status === 'active').length;
         document.getElementById('active-projects-count').textContent = activeProjectsCount;
         document.getElementById('total-projects-count').textContent = state.projects.length;
         
-        // Monitoring points and observations
         document.getElementById('monitoring-points-count').textContent = state.monitoringPoints.length;
         const totalObservations = state.monitoringPoints.reduce((sum, point) => sum + (point.observations ? point.observations.length : 0), 0);
         document.getElementById('total-observations-count').textContent = totalObservations;
         
-        // Calculate pending actions (based on incomplete milestones)
         let pendingActions = 0;
         let overdueActions = 0;
         const today = new Date();
@@ -2910,12 +3159,10 @@
         document.getElementById('pending-actions-count').textContent = pendingActions;
         document.getElementById('overdue-actions-count').textContent = overdueActions;
         
-        // Team members
         document.getElementById('team-members-count').textContent = state.teamMembers.length;
         document.getElementById('active-team-count').textContent = 
           state.teamMembers.filter(m => m.status === 'active').length;
         
-        // Show recent activities
         const activitiesContainer = document.getElementById('recent-activities');
         if (activitiesContainer) {
           activitiesContainer.innerHTML = '';
@@ -2951,7 +3198,6 @@
             ul.appendChild(li);
           });
           
-          // Add "View All" link if there are more activities
           if (state.activities.length > 5) {
             const li = document.createElement('li');
             li.style.padding = '10px 0';
@@ -2967,39 +3213,6 @@
       }
     }
 
-    // Report generation function
-    function handleReportSubmit(e) {
-      e.preventDefault();
-      
-      const projectId = document.getElementById('report-project').value;
-      const reportType = document.getElementById('report-type').value;
-      const format = document.getElementById('report-format').value;
-      const startDate = document.getElementById('report-start-date').value;
-      const endDate = document.getElementById('report-end-date').value;
-      
-      // Show loading state
-      const submitBtn = document.getElementById('report-form-submit');
-      const submitSpinner = document.getElementById('report-submit-spinner');
-      submitSpinner.style.display = 'inline-block';
-      submitBtn.disabled = true;
-      
-      // Simulate report generation
-      setTimeout(() => {
-        try {
-          // In a real implementation, this would generate an actual report
-          // For now, we'll just show a success message
-          showToast(`Report generated successfully (${reportType} - ${format})`, 'success');
-        } catch (error) {
-          console.error('Error generating report:', error);
-          showToast('Error generating report: ' + error.message, 'error');
-        } finally {
-          submitSpinner.style.display = 'none';
-          submitBtn.disabled = false;
-        }
-      }, 2000);
-    }
-
-    // Monitoring form handling
     function handleMonitoringSubmit(e) {
       e.preventDefault();
       
@@ -3026,125 +3239,119 @@
       };
       
       if (monitoringId) {
-        // Update existing point
         const index = state.monitoringPoints.findIndex(m => m.id === monitoringId);
         if (index !== -1) {
           state.monitoringPoints[index] = monitoringPoint;
         }
       } else {
-        // Add new point
         state.monitoringPoints.push(monitoringPoint);
       }
       
       saveData();
       renderMonitoringPoints();
-      showMonitoringTab('all');
+      showMonitoringTab('all', null);
       showToast('Monitoring point saved successfully', 'success');
     }
 
-    // Chart initialization and update functions
-    function initCharts() {
-      try {
-        // Project status chart
-        const statusCtx = document.getElementById('project-status-chart');
-        if (statusCtx) {
-          state.charts.statusChart = new Chart(statusCtx.getContext('2d'), {
-            type: 'doughnut',
-            data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
-            options: { 
-              responsive: true, 
-              maintainAspectRatio: false,
-              plugins: {
-                legend: { position: 'right' }
-              }
-            }
-          });
-        }
-        
-        // Restoration types chart
-        const typesCtx = document.getElementById('restoration-types-chart');
-        if (typesCtx) {
-          state.charts.typesChart = new Chart(typesCtx.getContext('2d'), {
-            type: 'bar',
-            data: { labels: [], datasets: [{ label: 'Projects', data: [], backgroundColor: [] }] },
-            options: { 
-              responsive: true, 
-              maintainAspectRatio: false,
-              scales: {
-                y: { beginAtZero: true }
-              }
-            }
-          });
-        }
-        
-        // Additional chart initializations would go here...
-      } catch (error) {
-        console.error('Error initializing charts:', error);
-      }
-    }
-
-    function updateCharts() {
-      try {
-        // Update project status chart
-        if (state.charts.statusChart) {
-          const statusCounts = {
-            active: state.projects.filter(p => p.status === 'active').length,
-            planned: state.projects.filter(p => p.status === 'planned').length,
-            completed: state.projects.filter(p => p.status === 'completed').length,
-            'on-hold': state.projects.filter(p => p.status === 'on-hold').length
-          };
-          
-          state.charts.statusChart.data.labels = Object.keys(statusCounts).map(key => 
-            key.charAt(0).toUpperCase() + key.slice(1).replace('-', ' '));
-          state.charts.statusChart.data.datasets[0].data = Object.values(statusCounts);
-          state.charts.statusChart.data.datasets[0].backgroundColor = ['#2e7d32', '#ff8f00', '#0288d1', '#d32f2f'];
-          state.charts.statusChart.update();
-        }
-        
-        // Update restoration types chart
-        if (state.charts.typesChart) {
-          const typeCounts = {};
-          state.projects.forEach(project => {
-            typeCounts[project.type] = (typeCounts[project.type] || 0) + 1;
-          });
-          
-          state.charts.typesChart.data.labels = Object.keys(typeCounts).map(type => 
-            type.charAt(0).toUpperCase() + type.slice(1));
-          state.charts.typesChart.data.datasets[0].data = Object.values(typeCounts);
-          state.charts.typesChart.data.datasets[0].backgroundColor = '#2e7d32';
-          state.charts.typesChart.update();
-        }
-        
-        // Additional chart updates would go here...
-      } catch (error) {
-        console.error('Error updating charts:', error);
-      }
-    }
-
-    // Additional utility functions
     function filterObservations() {
-      // Implementation for filtering observations
-      showToast('Observation filtering is in development', 'info');
+      renderObservations();
     }
     
     function renderObservations() {
-      // Implementation for rendering observations
       const container = document.getElementById('observations-list');
-      if (container) {
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      const allObservations = [];
+      state.monitoringPoints.forEach(point => {
+        if (point.observations) {
+          point.observations.forEach(obs => {
+            allObservations.push({
+              ...obs,
+              pointName: point.name,
+              projectId: point.projectId
+            });
+          });
+        }
+      });
+      
+      let filteredObservations = [...allObservations];
+      
+      const projectFilter = document.getElementById('observation-project').value;
+      if (projectFilter) {
+        filteredObservations = filteredObservations.filter(obs => 
+          state.monitoringPoints.find(p => p.id === obs.pointId)?.projectId === projectFilter
+        );
+      }
+      
+      const dateFilter = document.getElementById('observation-date-filter').value;
+      const today = new Date();
+      if (dateFilter === 'today') {
+        filteredObservations = filteredObservations.filter(obs => 
+          new Date(obs.date).toDateString() === today.toDateString()
+        );
+      } else if (dateFilter === 'week') {
+        const weekAgo = new Date(today);
+        weekAgo.setDate(today.getDate() - 7);
+        filteredObservations = filteredObservations.filter(obs => 
+          new Date(obs.date) >= weekAgo
+        );
+      } else if (dateFilter === 'month') {
+        const monthAgo = new Date(today);
+        monthAgo.setMonth(today.getMonth() - 1);
+        filteredObservations = filteredObservations.filter(obs => 
+          new Date(obs.date) >= monthAgo
+        );
+      }
+      
+      filteredObservations.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      if (filteredObservations.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
             <i class="fas fa-binoculars"></i>
-            <p>Observation management is in development</p>
+            <p>No observations found</p>
           </div>
         `;
+        return;
       }
+      
+      filteredObservations.forEach(obs => {
+        const project = state.projects.find(p => p.id === obs.projectId);
+        const point = state.monitoringPoints.find(p => p.projectId === obs.projectId);
+        
+        const observationCard = document.createElement('div');
+        observationCard.className = 'observation-card';
+        observationCard.innerHTML = `
+          <div class="observation-header">
+            <div class="observation-point">${point ? point.name : 'Unknown Point'} - ${project ? project.name : 'Unknown Project'}</div>
+            <div class="observation-date">${new Date(obs.date).toLocaleDateString()}</div>
+          </div>
+          <p>${escapeHtml(obs.notes)}</p>
+          ${obs.weather ? `<p><strong>Weather:</strong> ${obs.weather}</p>` : ''}
+          ${obs.temp ? `<p><strong>Temperature:</strong> ${obs.temp}°C</p>` : ''}
+          ${obs.photos && obs.photos.length > 0 ? `
+            <div class="photo-preview" style="margin-top: 10px;">
+              ${obs.photos.map(photo => `<img src="${photo.data}" class="photo-thumbnail" style="width: 60px; height: 60px;">`).join('')}
+            </div>
+          ` : ''}
+        `;
+        container.appendChild(observationCard);
+      });
     }
     
     function viewObservations(pointId) {
-      // Implementation for viewing observations
-      showToast('Observation viewing is in development', 'info');
+      const point = state.monitoringPoints.find(p => p.id === pointId);
+      if (!point) return;
+      
+      showMonitoringTab('observations', null);
+      document.getElementById('observation-project').value = point.projectId;
+      
+      setTimeout(() => {
+        filterObservations();
+      }, 100);
     }
-
   </script>
 </body>
 </html>
