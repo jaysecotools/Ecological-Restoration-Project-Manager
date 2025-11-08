@@ -12,6 +12,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
   <style>
+    /* Your existing CSS remains the same */
     :root {
       --primary: #2e7d32;
       --primary-light: #60ad5e;
@@ -188,7 +189,7 @@
       background-color: #f1f1f1;
     }
 
-    #projects-map, #project-location-map, #monitoring-location-map {
+    #projects-map, #project-location-map, #monitoring-location-map, #project-detail-map {
       height: 300px;
     }
 
@@ -701,6 +702,17 @@
       background: transparent !important;
       border: none !important;
     }
+    
+    /* New styles for project detail map */
+    .project-detail-map-container {
+      margin: 20px 0;
+    }
+    
+    .project-map-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -917,6 +929,7 @@
       </div>
     </section>
 
+    <!-- Rest of your HTML remains the same -->
     <section id="monitoring" class="section">
       <div class="card">
         <h2>Monitoring Points</h2>
@@ -1288,6 +1301,7 @@
       monitoringMap: null,
       projectLocationMap: null,
       monitoringLocationMap: null,
+      projectDetailMap: null,
       projectLocationMarker: null,
       monitoringLocationMarker: null,
       charts: {},
@@ -1742,16 +1756,18 @@
       showToast('PDF report generated successfully', 'success');
     }
 
-    // Fixed Map Markers
+    // IMPROVED: Fixed Map Markers with better integration
     function updateProjectMapMarkers() {
       if (!state.projectMap) return;
       
+      // Clear existing markers
       state.projectMap.eachLayer(layer => {
         if (layer instanceof L.Marker) {
           state.projectMap.removeLayer(layer);
         }
       });
       
+      // Add markers for each project
       state.projects.forEach(project => {
         const icon = L.divIcon({
           html: `<div style="background-color: ${getStatusColor(project.status)}; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid white;">
@@ -1764,12 +1780,72 @@
         
         const marker = L.marker(project.location.coords, { icon: icon })
           .addTo(state.projectMap)
-          .bindPopup(`<b>${project.name}</b><br>${project.type} restoration`)
+          .bindPopup(`<b>${project.name}</b><br>${project.type} restoration<br><small>${project.location.name}</small>`)
           .on('click', () => viewProjectDetails(project.id));
       });
+      
+      // Fit map to show all markers
+      if (state.projects.length > 0) {
+        const group = new L.featureGroup(state.projects.map(p => L.marker(p.location.coords)));
+        state.projectMap.fitBounds(group.getBounds().pad(0.1));
+      }
     }
 
-    // Rest of the original functions remain exactly the same...
+    // NEW: Initialize project detail map
+    function initProjectDetailMap(project) {
+      if (!project || !project.location || !project.location.coords) return null;
+      
+      const mapContainer = document.getElementById('project-detail-map');
+      if (!mapContainer) return null;
+      
+      // Clear any existing map
+      if (state.projectDetailMap) {
+        state.projectDetailMap.remove();
+      }
+      
+      // Create new map
+      const map = L.map('project-detail-map').setView(project.location.coords, 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+      
+      // Add project marker
+      const icon = L.divIcon({
+        html: `<div style="background-color: ${getStatusColor(project.status)}; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                <i class="fas fa-${getProjectIcon(project.type)}" style="font-size: 18px;"></i>
+              </div>`,
+        className: 'custom-marker',
+        iconSize: [40, 40],
+        iconAnchor: [20, 20]
+      });
+      
+      L.marker(project.location.coords, { icon: icon })
+        .addTo(map)
+        .bindPopup(`<b>${project.name}</b><br>${project.type} restoration<br><small>${project.location.name}</small>`)
+        .openPopup();
+      
+      // Add monitoring point markers if any
+      const projectMonitoringPoints = state.monitoringPoints.filter(p => p.projectId === project.id);
+      projectMonitoringPoints.forEach(point => {
+        const monitoringIcon = L.divIcon({
+          html: `<div style="background-color: #0288d1; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid white;">
+                  <i class="fas fa-binoculars" style="font-size: 12px;"></i>
+                </div>`,
+          className: 'custom-marker',
+          iconSize: [25, 25],
+          iconAnchor: [12.5, 12.5]
+        });
+        
+        L.marker(point.coords, { icon: monitoringIcon })
+          .addTo(map)
+          .bindPopup(`<b>${point.name}</b><br>${point.type} monitoring<br><small>${point.observations ? point.observations.length : 0} observations</small>`);
+      });
+      
+      state.projectDetailMap = map;
+      return map;
+    }
+
+    // Rest of the functions remain the same with minor improvements
     function showLoading(show) {
       document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
     }
@@ -2196,6 +2272,20 @@
         'on-hold': '#d32f2f'
       };
       return colors[status] || '#2e7d32';
+    }
+
+    function getProjectIcon(type) {
+      const icons = {
+        riparian: 'water',
+        coastal: 'umbrella-beach',
+        wetland: 'frog',
+        forest: 'tree',
+        grassland: 'mountain',
+        urban: 'city',
+        mine: 'mountain',
+        agricultural: 'tractor'
+      };
+      return icons[type] || 'leaf';
     }
 
     function showMonitoringTab(tabId, event) {
@@ -2634,20 +2724,7 @@
       }
     }
 
-    function getProjectIcon(type) {
-      const icons = {
-        riparian: 'water',
-        coastal: 'umbrella-beach',
-        wetland: 'frog',
-        forest: 'tree',
-        grassland: 'mountain',
-        urban: 'city',
-        mine: 'mountain',
-        agricultural: 'tractor'
-      };
-      return icons[type] || 'leaf';
-    }
-
+    // IMPROVED: View project details with integrated map
     function viewProjectDetails(projectId) {
       const project = state.projects.find(p => p.id === projectId);
       if (!project) return;
@@ -2713,6 +2790,11 @@
           </div>
         </div>
         
+        <div class="project-detail-map-container">
+          <h3>Project Location</h3>
+          <div id="project-detail-map" class="map-container"></div>
+        </div>
+        
         ${project.milestones && project.milestones.length > 0 ? `
           <div style="margin-top: 20px;">
             <h3>Project Timeline</h3>
@@ -2732,6 +2814,11 @@
       `;
       
       modal.style.display = 'flex';
+      
+      // Initialize the project detail map after the modal is displayed
+      setTimeout(() => {
+        initProjectDetailMap(project);
+      }, 100);
     }
 
     function closeModal() {
@@ -2746,6 +2833,7 @@
       }
     }
 
+    // The rest of your existing functions remain the same
     function renderMonitoringPoints(projectFilter = '') {
       const container = document.getElementById('monitoring-points-list');
       if (!container) return;
