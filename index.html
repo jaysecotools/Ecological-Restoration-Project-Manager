@@ -1326,7 +1326,6 @@
       try {
         showLoading(true);
         loadData();
-        initMaps();
         initNavigation();
         renderProjects();
         renderMonitoringPoints();
@@ -1335,6 +1334,7 @@
         initCharts();
         
         setTimeout(() => {
+          initMaps();
           updateCharts();
           showLoading(false);
         }, 100);
